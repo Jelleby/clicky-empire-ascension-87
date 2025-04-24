@@ -15,6 +15,7 @@ interface GameStore extends GameState {
   buyUpgrade: (upgradeId: string) => boolean;
   buyResearch: (researchId: string) => boolean;
   prestigeReset: () => void;
+  loadGameState: (state: GameState) => void;
   
   // UI State
   numberPopups: NumberPopup[];
@@ -71,6 +72,13 @@ export const useGameStore = create<GameStore>()(
         }
         
         set({ lastTickTimestamp: currentTime });
+      },
+      
+      loadGameState: (state: GameState) => {
+        set({
+          ...state,
+          numberPopups: []
+        });
       },
       
       tick: (currentTime: number) => {
