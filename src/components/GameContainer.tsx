@@ -73,6 +73,9 @@ const GameContainer: React.FC = () => {
               research: JSON.parse(savedData.research),
               prestige: JSON.parse(savedData.prestige),
               totalResourcesEarned: savedData.total_resources_earned,
+              // Add default values if properties are missing
+              clickPower: savedData.click_power || 1,
+              offlineProductionEnabled: savedData.offline_production_enabled || false,
               lastTickTimestamp: Date.now()
             };
             
@@ -126,6 +129,8 @@ const GameContainer: React.FC = () => {
           research: JSON.stringify(research),
           prestige: JSON.stringify(prestige),
           total_resources_earned: totalResourcesEarned,
+          click_power: clickPower,
+          offline_production_enabled: offlineProductionEnabled,
           last_save: new Date().toISOString()
         };
         
@@ -142,7 +147,8 @@ const GameContainer: React.FC = () => {
     return () => clearInterval(saveInterval);
   }, [
     isLoggedIn, resources, premiumCurrency, generators, 
-    upgrades, research, prestige, totalResourcesEarned
+    upgrades, research, prestige, totalResourcesEarned,
+    clickPower, offlineProductionEnabled
   ]);
   
   // Manual save function
@@ -163,6 +169,8 @@ const GameContainer: React.FC = () => {
       research: JSON.stringify(research),
       prestige: JSON.stringify(prestige),
       total_resources_earned: totalResourcesEarned,
+      click_power: clickPower,
+      offline_production_enabled: offlineProductionEnabled,
       last_save: new Date().toISOString()
     };
     

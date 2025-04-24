@@ -2,10 +2,14 @@
 import { createClient } from '@supabase/supabase-js';
 import { toast } from '@/components/ui/use-toast';
 
+// Check if environment variables are available
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
 // Create a single supabase client for interacting with your database
 const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
+  supabaseUrl || 'https://your-project-url.supabase.co',
+  supabaseAnonKey || 'your-anon-key'
 );
 
 export interface GameSaveData {
@@ -19,6 +23,8 @@ export interface GameSaveData {
   prestige: string; // JSON stringified
   total_resources_earned: number;
   last_save: string;
+  click_power?: number; // Added for clickPower
+  offline_production_enabled?: boolean; // Added for offlineProductionEnabled
 }
 
 export interface LeaderboardEntry {
