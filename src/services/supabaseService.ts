@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 import { GameState } from '../types/game';
 
@@ -7,6 +8,34 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default supabase;
+
+export const signIn = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+  
+  if (error) {
+    console.error('Error signing in:', error.message);
+    return null;
+  }
+  
+  return data.user;
+};
+
+export const signUp = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password
+  });
+  
+  if (error) {
+    console.error('Error signing up:', error.message);
+    return null;
+  }
+  
+  return data.user;
+};
 
 export const getCurrentUser = async () => {
   const { data: { user } } = await supabase.auth.getUser();
