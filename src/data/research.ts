@@ -1,4 +1,3 @@
-
 import { Research } from "../types/game";
 
 export const initialResearch: Research[] = [
@@ -27,6 +26,30 @@ export const initialResearch: Research[] = [
     effectDescription: "+20% generator output per level"
   },
   {
+    id: "efficiency3",
+    name: "Quantum Computing",
+    description: "Harness quantum effects for unprecedented efficiency.",
+    cost: 50,
+    level: 0,
+    maxLevel: 5,
+    baseEffect: 0.5, // +50% per level
+    unlocked: true,
+    category: "efficiency",
+    effectDescription: "+50% generator output per level"
+  },
+  {
+    id: "efficiency4",
+    name: "Neural Networks",
+    description: "AI-powered optimization of server operations.",
+    cost: 75,
+    level: 0,
+    maxLevel: 5,
+    baseEffect: 0.4, // +40% per level
+    unlocked: true,
+    category: "efficiency",
+    effectDescription: "+40% generator output per level"
+  },
+  {
     id: "income1",
     name: "Data Compression",
     description: "Compress data to get more value from each byte.",
@@ -49,6 +72,30 @@ export const initialResearch: Research[] = [
     unlocked: true,
     category: "income",
     effectDescription: "+25% click value per level"
+  },
+  {
+    id: "income3",
+    name: "Big Data Analytics",
+    description: "Extract more value from your data.",
+    cost: 40,
+    level: 0,
+    maxLevel: 8,
+    baseEffect: 0.3, // +30% per level
+    unlocked: true,
+    category: "income",
+    effectDescription: "+30% click value per level"
+  },
+  {
+    id: "income4",
+    name: "Blockchain Integration",
+    description: "Leverage blockchain for enhanced data value.",
+    cost: 60,
+    level: 0,
+    maxLevel: 6,
+    baseEffect: 0.4, // +40% per level
+    unlocked: true,
+    category: "income",
+    effectDescription: "+40% click value per level"
   },
   {
     id: "prestige1",
@@ -74,4 +121,28 @@ export const initialResearch: Research[] = [
     category: "prestige",
     effectDescription: "+30% prestige multiplier effectiveness per level"
   },
+  {
+    id: "prestige3",
+    name: "Time Dilation",
+    description: "Bend time to enhance offline production.",
+    cost: 100,
+    level: 0,
+    maxLevel: 5,
+    baseEffect: 0.2, // +20% offline production per level
+    unlocked: true,
+    category: "prestige",
+    effectDescription: "+20% offline production per level"
+  },
+  {
+    id: "prestige4",
+    name: "Dimensional Shifting",
+    description: "Access parallel dimensions for enhanced prestige gains.",
+    cost: 150,
+    level: 0,
+    maxLevel: 3,
+    baseEffect: 0.5, // +50% prestige points per level
+    unlocked: true,
+    category: "prestige",
+    effectDescription: "+50% prestige points per level"
+  }
 ];

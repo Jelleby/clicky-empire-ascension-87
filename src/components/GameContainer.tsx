@@ -5,6 +5,7 @@ import ClickArea from './ClickArea';
 import ResourceDisplay from './ResourceDisplay';
 import GameTabs from './GameTabs';
 import PrestigePanel from './PrestigePanel';
+import TutorialOverlay from './TutorialOverlay';
 
 const GameContainer: React.FC = () => {
   const { initGame, tick } = useGameStore();
@@ -26,6 +27,7 @@ const GameContainer: React.FC = () => {
 
   return (
     <div className="w-full max-w-md mx-auto p-4">
+      <TutorialOverlay />
       <ResourceDisplay />
       <ClickArea />
       <PrestigePanel />

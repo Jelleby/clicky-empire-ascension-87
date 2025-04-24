@@ -1,4 +1,3 @@
-
 import { Upgrade } from "../types/game";
 
 export const initialUpgrades: Upgrade[] = [
@@ -115,6 +114,17 @@ export const initialUpgrades: Upgrade[] = [
     requiredGenerators: { server3: 10 }
   },
   {
+    id: "server3_upgrade2",
+    name: "Enhanced Databases",
+    description: "Database Servers produce 3x more data.",
+    cost: 100000,
+    purchased: false,
+    unlocked: false,
+    multiplier: 3,
+    target: "server3",
+    requiredGenerators: { server3: 25 }
+  },
+  {
     id: "server4_upgrade1",
     name: "Parallelization",
     description: "Application Servers produce 2x more data.",
@@ -126,6 +136,17 @@ export const initialUpgrades: Upgrade[] = [
     requiredGenerators: { server4: 10 }
   },
   {
+    id: "server4_upgrade2",
+    name: "Multi-Threading",
+    description: "Application Servers produce 3x more data.",
+    cost: 1000000,
+    purchased: false,
+    unlocked: false,
+    multiplier: 3,
+    target: "server4",
+    requiredGenerators: { server4: 25 }
+  },
+  {
     id: "server5_upgrade1",
     name: "Smart Routing",
     description: "Load Balancers produce 2x more data.",
@@ -135,6 +156,39 @@ export const initialUpgrades: Upgrade[] = [
     multiplier: 2,
     target: "server5",
     requiredGenerators: { server5: 10 }
+  },
+  {
+    id: "server5_upgrade2",
+    name: "Advanced Balancing",
+    description: "Load Balancers produce 3x more data.",
+    cost: 10000000,
+    purchased: false,
+    unlocked: false,
+    multiplier: 3,
+    target: "server5",
+    requiredGenerators: { server5: 25 }
+  },
+  {
+    id: "server6_upgrade1",
+    name: "GPU Acceleration",
+    description: "GPU Servers produce 2x more data.",
+    cost: 10000000,
+    purchased: false,
+    unlocked: false,
+    multiplier: 2,
+    target: "server6",
+    requiredGenerators: { server6: 10 }
+  },
+  {
+    id: "server6_upgrade2",
+    name: "CUDA Optimization",
+    description: "GPU Servers produce 3x more data.",
+    cost: 100000000,
+    purchased: false,
+    unlocked: false,
+    multiplier: 3,
+    target: "server6",
+    requiredGenerators: { server6: 25 }
   },
 
   // Global Upgrades
@@ -181,5 +235,27 @@ export const initialUpgrades: Upgrade[] = [
     multiplier: 5,
     target: "all",
     requiredGenerators: { server8: 1 }
+  },
+  {
+    id: "global5",
+    name: "Cloud Integration",
+    description: "All Servers produce 8x more data.",
+    cost: 5000000000,
+    purchased: false,
+    unlocked: false,
+    multiplier: 8,
+    target: "all",
+    requiredGenerators: { server8: 5 }
+  },
+  {
+    id: "global6",
+    name: "Edge Computing",
+    description: "All Servers produce 10x more data.",
+    cost: 50000000000,
+    purchased: false,
+    unlocked: false,
+    multiplier: 10,
+    target: "all",
+    requiredGenerators: { server9: 1 }
   }
 ];
