@@ -1,4 +1,3 @@
-
 import { createClient } from '@supabase/supabase-js';
 import { toast } from '@/components/ui/use-toast';
 
@@ -237,6 +236,36 @@ export const getLeaderboard = async () => {
   } catch (error: any) {
     console.error("Error fetching leaderboard:", error);
     return [];
+  }
+};
+
+export const joinChallenge = async (challengeId: string) => {
+  try {
+    const user = await getCurrentUser();
+    if (!user) return null;
+    
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', user.id)
+      .single();
+      
+    const { data, error } = await supabase
+      .from('challenge_participants')
+      .upsert({
+        challenge_id: challengeId,
+        user_id: user.id,
+        username: profile?.username || user.email?.split('@')[0] || 'Anonymous',
+        contribution: 0,
+        joined_at: new Date().toISOString()
+      }, { onConflict: 'user_id,challenge_id' })
+      .select();
+      
+    if (error) throw error;
+    return data;
+  } catch (error: any) {
+    console.error("Error joining challenge:", error);
+    return null;
   }
 };
 

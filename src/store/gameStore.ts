@@ -6,6 +6,7 @@ import { initialUpgrades } from '../data/upgrades';
 import { initialResearch } from '../data/research';
 import { initialAchievements } from '../data/achievements';
 import { formatNumber } from '../utils/formatters';
+import { toast } from '@/hooks/use-toast';
 
 interface GameStore extends GameState {
   // Actions

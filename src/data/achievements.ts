@@ -1,6 +1,6 @@
 
 import { Achievement } from '../types/achievements';
-import { award, gamepad, star, trophy } from 'lucide-react';
+import { Award, Gamepad, Star, Trophy } from 'lucide-react';
 
 export const initialAchievements: Achievement[] = [
   {
