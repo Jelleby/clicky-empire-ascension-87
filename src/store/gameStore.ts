@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { GameState, Generator, NumberPopup, Upgrade } from '../types/game';
+import { GameState, Generator, NumberPopup, Upgrade, Achievement } from '../types/game';
 import { initialGenerators } from '../data/generators';
 import { initialUpgrades } from '../data/upgrades';
 import { initialResearch } from '../data/research';
+import { initialAchievements } from '../data/achievements';
 import { formatNumber } from '../utils/formatters';
 
 interface GameStore extends GameState {
@@ -30,6 +31,9 @@ interface GameStore extends GameState {
   getResearchMultiplier: (category: string) => number;
   getPendingPrestigePoints: () => number;
   getPrestigeMultiplier: (points: number) => number;
+  
+  achievements: Achievement[];
+  checkAchievements: () => void;
 }
 
 export const useGameStore = create<GameStore>()(
@@ -51,7 +55,8 @@ export const useGameStore = create<GameStore>()(
       lastTickTimestamp: Date.now(),
       offlineProductionEnabled: true,
       numberPopups: [],
-
+      achievements: initialAchievements,
+      
       initGame: () => {
         const currentTime = Date.now();
         const lastTickTime = get().lastTickTimestamp;
@@ -147,6 +152,8 @@ export const useGameStore = create<GameStore>()(
             upgrades: updatedUpgrades
           });
         }
+        
+        get().checkAchievements();
       },
       
       clickServer: (x, y) => {
@@ -167,6 +174,8 @@ export const useGameStore = create<GameStore>()(
           resources: state.resources + clickValue,
           totalResourcesEarned: state.totalResourcesEarned + clickValue
         }));
+        
+        get().checkAchievements();
       },
       
       buyGenerator: (generatorId: string) => {
@@ -384,6 +393,59 @@ export const useGameStore = create<GameStore>()(
       getPrestigeMultiplier: (points) => {
         // Formula: 1 + points * 0.1
         return 1 + points * 0.1;
+      },
+      
+      checkAchievements: () => {
+        const state = get();
+        const updatedAchievements = state.achievements.map(achievement => {
+          if (achievement.unlocked) return achievement;
+          
+          let progress = 0;
+          switch (achievement.requirement.type) {
+            case 'resources':
+              progress = state.totalResourcesEarned;
+              break;
+            case 'generators':
+              progress = state.generators.reduce((sum, gen) => sum + gen.quantity, 0);
+              break;
+            case 'prestige':
+              progress = state.prestige.level;
+              break;
+            case 'upgrades':
+              progress = state.upgrades.filter(u => u.purchased).length;
+              break;
+          }
+          
+          const shouldUnlock = progress >= achievement.requirement.value;
+          
+          if (shouldUnlock && !achievement.unlocked) {
+            // Apply reward
+            switch (achievement.reward.type) {
+              case 'multiplier':
+                // This will be applied in click and generator calculations
+                break;
+              case 'premium':
+                set(state => ({
+                  premiumCurrency: state.premiumCurrency + achievement.reward.value
+                }));
+                break;
+            }
+            
+            // Show toast
+            toast({
+              title: "Achievement Unlocked!",
+              description: achievement.name,
+            });
+          }
+          
+          return {
+            ...achievement,
+            progress,
+            unlocked: shouldUnlock
+          };
+        });
+        
+        set({ achievements: updatedAchievements });
       }
     }),
     {

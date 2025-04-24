@@ -1,53 +1,39 @@
-
-import React, { useState } from 'react';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import React from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import GeneratorsList from './GeneratorsList';
 import UpgradesList from './UpgradesList';
 import ResearchPanel from './ResearchPanel';
-import { Badge } from '@/components/ui/badge';
-import { useGameStore } from '../store/gameStore';
+import AchievementsList from './AchievementsList';
 
 const GameTabs: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("generators");
-  const { upgrades } = useGameStore();
-  
-  // Count available upgrades for badge
-  const availableUpgrades = upgrades.filter(u => u.unlocked && !u.purchased).length;
-
   return (
-    <Tabs defaultValue="generators" value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="grid grid-cols-3 mb-2 bg-game-dark">
-        <TabsTrigger value="generators" className="data-[state=active]:bg-game-primary">
-          Servers
-        </TabsTrigger>
-        <TabsTrigger value="upgrades" className="relative data-[state=active]:bg-game-primary">
-          Upgrades
-          {availableUpgrades > 0 && (
-            <Badge className="absolute -top-1 -right-1 h-4 min-w-4 p-0 flex items-center justify-center bg-game-highlight text-[10px]">
-              {availableUpgrades}
-            </Badge>
-          )}
-        </TabsTrigger>
-        <TabsTrigger value="research" className="data-[state=active]:bg-game-primary">
-          Research
-        </TabsTrigger>
+    <Tabs defaultValue="generators" className="w-full">
+      <TabsList className="grid w-full grid-cols-5 mb-4">
+        <TabsTrigger value="generators">Generators</TabsTrigger>
+        <TabsTrigger value="upgrades">Upgrades</TabsTrigger>
+        <TabsTrigger value="research">Research</TabsTrigger>
+        <TabsTrigger value="achievements">Achievements</TabsTrigger>
+        <TabsTrigger value="stats">Stats</TabsTrigger>
       </TabsList>
       
-      <TabsContent value="generators" className="mt-0">
+      <TabsContent value="generators">
         <GeneratorsList />
       </TabsContent>
       
-      <TabsContent value="upgrades" className="mt-0">
+      <TabsContent value="upgrades">
         <UpgradesList />
       </TabsContent>
       
-      <TabsContent value="research" className="mt-0">
+      <TabsContent value="research">
         <ResearchPanel />
+      </TabsContent>
+      
+      <TabsContent value="achievements">
+        <AchievementsList />
+      </TabsContent>
+      
+      <TabsContent value="stats">
+        {/* Stats content */}
       </TabsContent>
     </Tabs>
   );
