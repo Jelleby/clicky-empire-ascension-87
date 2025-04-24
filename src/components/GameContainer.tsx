@@ -30,6 +30,8 @@ const GameContainer: React.FC = () => {
     research, 
     prestige, 
     totalResourcesEarned,
+    clickPower,
+    offlineProductionEnabled,
     loadGameState 
   } = useGameStore();
   
@@ -73,6 +75,8 @@ const GameContainer: React.FC = () => {
               research: JSON.parse(savedData.research),
               prestige: JSON.parse(savedData.prestige),
               totalResourcesEarned: savedData.total_resources_earned,
+              clickPower: 1, // Default value if not available in saved data
+              offlineProductionEnabled: true, // Default value if not available in saved data
               lastTickTimestamp: Date.now()
             };
             
