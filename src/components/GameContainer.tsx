@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import ClickArea from './ClickArea';
@@ -38,9 +37,10 @@ const GameContainer: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [clickPower, setClickPower] = useState(1);
+  const [offlineProductionEnabled, setOfflineProductionEnabled] = useState(true);
   const { toast } = useToast();
   
-  // Check authentication status
   useEffect(() => {
     const checkAuth = async () => {
       const user = await getCurrentUser();
@@ -53,12 +53,10 @@ const GameContainer: React.FC = () => {
     checkAuth();
   }, []);
   
-  // Initialize game data
   useEffect(() => {
     const initializeGame = async () => {
       initGame();
       
-      // Try to load from Supabase if logged in
       const user = await getCurrentUser();
       if (user) {
         const savedData = await loadGameData();
@@ -73,7 +71,11 @@ const GameContainer: React.FC = () => {
               research: JSON.parse(savedData.research),
               prestige: JSON.parse(savedData.prestige),
               totalResourcesEarned: savedData.total_resources_earned,
-              lastTickTimestamp: Date.now()
+              lastTickTimestamp: Date.now(),
+              clickPower: savedData.click_power || 1,
+              offlineProductionEnabled: savedData.offline_production_enabled !== undefined 
+                ? savedData.offline_production_enabled 
+                : true
             };
             
             loadGameState(gameState);
@@ -99,9 +101,7 @@ const GameContainer: React.FC = () => {
     initializeGame();
   }, [initGame, loadGameState, toast]);
   
-  // Game tick loop
   useEffect(() => {
-    // Update the game state every 100ms
     const tickInterval = setInterval(() => {
       tick(Date.now());
     }, 100);
@@ -109,7 +109,6 @@ const GameContainer: React.FC = () => {
     return () => clearInterval(tickInterval);
   }, [tick]);
   
-  // Autosave game to Supabase every 30 seconds
   useEffect(() => {
     if (!isLoggedIn) return;
     
@@ -126,7 +125,9 @@ const GameContainer: React.FC = () => {
           research: JSON.stringify(research),
           prestige: JSON.stringify(prestige),
           total_resources_earned: totalResourcesEarned,
-          last_save: new Date().toISOString()
+          last_save: new Date().toISOString(),
+          click_power: clickPower,
+          offline_production_enabled: offlineProductionEnabled
         };
         
         const saved = await saveGameData(gameData);
@@ -134,18 +135,17 @@ const GameContainer: React.FC = () => {
           setLastSaved(new Date());
         }
         
-        // Update leaderboard
         await updateLeaderboard(totalResourcesEarned, prestige.level);
       }
-    }, 30000); // Save every 30 seconds
+    }, 30000);
     
     return () => clearInterval(saveInterval);
   }, [
     isLoggedIn, resources, premiumCurrency, generators, 
-    upgrades, research, prestige, totalResourcesEarned
+    upgrades, research, prestige, totalResourcesEarned,
+    clickPower, offlineProductionEnabled
   ]);
   
-  // Manual save function
   const handleManualSave = async () => {
     const user = await getCurrentUser();
     
@@ -163,7 +163,9 @@ const GameContainer: React.FC = () => {
       research: JSON.stringify(research),
       prestige: JSON.stringify(prestige),
       total_resources_earned: totalResourcesEarned,
-      last_save: new Date().toISOString()
+      last_save: new Date().toISOString(),
+      click_power: clickPower,
+      offline_production_enabled: offlineProductionEnabled
     };
     
     const saved = await saveGameData(gameData);
@@ -174,13 +176,11 @@ const GameContainer: React.FC = () => {
       });
       setLastSaved(new Date());
       
-      // Update leaderboard
       await updateLeaderboard(totalResourcesEarned, prestige.level);
     }
   };
   
   const handleLogout = async () => {
-    // Save before logout
     await handleManualSave();
     
     const success = await signOut();
@@ -194,7 +194,6 @@ const GameContainer: React.FC = () => {
     <div className="w-full max-w-md mx-auto p-4">
       <TutorialOverlay />
       
-      {/* Online features bar */}
       <div className="flex justify-between items-center mb-4 bg-game-dark p-2 rounded-lg">
         <div className="text-sm text-game-text">
           {isLoggedIn ? (
@@ -260,7 +259,6 @@ const GameContainer: React.FC = () => {
       <PrestigePanel />
       <GameTabs />
       
-      {/* Modals */}
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
       <LeaderboardModal isOpen={isLeaderboardOpen} onClose={() => setIsLeaderboardOpen(false)} />
     </div>
